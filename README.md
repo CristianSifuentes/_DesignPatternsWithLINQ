@@ -280,25 +280,3 @@ var adults = people.Where(p => p.Age >= 18);
 
 > This README combines design pattern sections and LINQ mastery guidance to help you build a complete and well-organized learning project.
 
-- No enumeres una consulta varias veces sin necesidad.
-- Evita efectos secundarios dentro de expresiones LINQ.
-- Ojo con la evaluación en el cliente en EF Core.
-
-## Implementation Plan
-
-1. Crear carpetas de ejemplo para cada patrón de diseño.
-2. Implementar una clase de ejemplo y un caso de uso simple en C# para cada patrón.
-3. Agregar ejemplos de LINQ avanzados y explicaciones en una sección de pruebas.
-4. Documentar cada patrón y LINQ en archivos `README.md` específicos si se necesita.
-5. Asegurar que los ejemplos compilables se puedan ejecutar y validar.
-
-## Resources
-
-- Patrones de diseño creacionales, estructurales y de comportamiento en C#.
-- Técnicas avanzadas de LINQ para rendimiento y expresividad.
-- Buenas prácticas para C# y .NET.
-
----
-
-> Este README combina las secciones de patrones de diseño y LINQ para ayudarte a construir un proyecto de aprendizaje completo y bien organizado.
-
