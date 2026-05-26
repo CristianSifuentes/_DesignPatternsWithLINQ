@@ -1,8 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
+    <RuntimeFrameworkVersion>8.0.22</RuntimeFrameworkVersion>
+    <AspNetCoreRuntimeFrameworkVersion>8.0.22</AspNetCoreRuntimeFrameworkVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>DesignPatterns.Api</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="8.0.0" />
+  </ItemGroup>
 </Project>
