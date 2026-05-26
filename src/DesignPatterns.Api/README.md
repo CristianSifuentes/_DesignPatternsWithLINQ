@@ -1,23 +1,23 @@
 # DesignPatterns.Api
 
-API en ASP.NET Core preparada para estudiar patrones de diseño en profundidad.
+An ASP.NET Core API prepared for studying design patterns in depth.
 
-## Primer patrón implementado: Abstract Factory
+## First implemented pattern: Abstract Factory
 
-- Endpoint de estilos disponibles: `GET /api/patterns/abstract-factory/styles`
-- Endpoint de demostración: `GET /api/patterns/abstract-factory/furniture-set?style=Modern`
+- Available styles endpoint: `GET /api/patterns/abstract-factory/styles`
+- Demo endpoint: `GET /api/patterns/abstract-factory/furniture-set?style=Modern`
 
-### Objetivo de arquitectura
+### Architectural goal
 
-La solución está preparada para crecer con nuevos patrones separando:
+The solution is designed to grow with new patterns by separating:
 
-- `Domain/`: abstracciones y contratos de negocio por patrón.
-- `Infrastructure/`: implementaciones concretas.
-- `Application/`: casos de uso/orquestación.
-- `Controllers/`: capa HTTP.
-- `Extensions/`: composición y DI.
+- `Domain/`: abstractions and business contracts per pattern.
+- `Infrastructure/`: concrete implementations.
+- `Application/`: use cases/orchestration.
+- `Controllers/`: HTTP layer.
+- `Extensions/`: composition and DI.
 
-## Próximos patrones sugeridos
+## Suggested next patterns
 
 - Factory Method
 - Builder

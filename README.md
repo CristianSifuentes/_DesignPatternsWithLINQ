@@ -1,14 +1,14 @@
 # Design Patterns With LINQ - Playground
 
-Repositorio base para construir un laboratorio de patrones de diseño en .NET con enfoque práctico.
+Base repository to build a design patterns lab in .NET with a practical, hands-on approach.
 
-## Estado actual
+## Current status
 
-✅ Proyecto `ASP.NET Core Web API` inicial preparado.
-✅ Primer patrón implementado: **Abstract Factory** (familia de muebles por estilo).
-✅ Estructura escalable para agregar más patrones sin romper código cliente.
+✅ Initial `ASP.NET Core Web API` project prepared.
+✅ First implemented pattern: **Abstract Factory** (family of furniture by style).
+✅ Scalable structure to add more patterns without breaking client code.
 
-## Estructura
+## Structure
 
 - `DesignPatternsWithLinq.sln`
 - `src/DesignPatterns.Api`
@@ -18,7 +18,7 @@ Repositorio base para construir un laboratorio de patrones de diseño en .NET co
   - `Infrastructure`
   - `Extensions`
 
-## Cómo correr (local)
+## How to run (local)
 
 ```bash
 dotnet restore
@@ -26,7 +26,7 @@ dotnet build
 dotnet run --project src/DesignPatterns.Api
 ```
 
-## Endpoints iniciales
+## Initial endpoints
 
 - `GET /api/patterns/abstract-factory/styles`
 - `GET /api/patterns/abstract-factory/furniture-set?style=Modern`
