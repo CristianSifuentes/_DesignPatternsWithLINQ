@@ -1,33 +1,312 @@
 # Design Patterns With LINQ - Playground
 
-Base repository to build a design patterns lab in .NET with a practical, hands-on approach.
+A comprehensive exploration of Gang of Four design patterns implemented in .NET with practical, hands-on examples and a focus on real-world applications.
 
-## Current status
+---
 
-✅ Initial `ASP.NET Core Web API` project prepared.
-✅ First implemented pattern: **Abstract Factory** (family of furniture by style).
-✅ Scalable structure to add more patterns without breaking client code.
+## Table of Contents
 
-## Structure
+### Creational Patterns
 
-- `DesignPatternsWithLinq.sln`
-- `src/DesignPatterns.Api`
-  - `Controllers`
-  - `Application`
-  - `Domain`
-  - `Infrastructure`
-  - `Extensions`
+1. **[Abstract Factory](#abstract-factory)** ✅ Implemented
+   - Create families of related objects without specifying concrete classes
+2. **Factory Method** ⏳ Planned
+3. **Builder** ⏳ Planned
+4. **Prototype** ⏳ Planned
+5. **Singleton** ⏳ Planned
 
-## How to run (local)
+### Structural Patterns
+
+- **Adapter** ⏳ Planned
+- **Bridge** ⏳ Planned
+- **Composite** ⏳ Planned
+- **Decorator** ⏳ Planned
+- **Facade** ⏳ Planned
+- **Flyweight** ⏳ Planned
+- **Proxy** ⏳ Planned
+
+### Behavioral Patterns
+
+- **Chain of Responsibility** ⏳ Planned
+- **Command** ⏳ Planned
+- **Iterator** ⏳ Planned
+- **Mediator** ⏳ Planned
+- **Memento** ⏳ Planned
+- **Observer** ⏳ Planned
+- **State** ⏳ Planned
+- **Strategy** ⏳ Planned
+- **Template Method** ⏳ Planned
+- **Visitor** ⏳ Planned
+- **Interpreter** ⏳ Planned
+
+---
+
+## Abstract Factory
+
+### Overview
+
+**Type:** Creational Pattern  
+**Also Known As:** Kit  
+**Difficulty Level:** ⭐⭐⭐ (Intermediate)
+
+### Definition
+
+Abstract Factory is a creational design pattern that allows you to produce **families of related objects without specifying their concrete classes**.
+
+### What It Allows You to Do
+
+✅ **Create families of compatible objects** - Ensures that related products (e.g., Chair + Sofa + CoffeeTable) work together seamlessly across different style variants (Modern, Victorian, ArtDeco).
+
+✅ **Decouple client code from concrete implementations** - Clients work with abstract interfaces, not concrete classes, making the code flexible and maintainable.
+
+✅ **Easily extend with new product variants** - Add new furniture styles or UI themes without modifying existing client code.
+
+✅ **Guarantee consistency** - Products created by a single factory are guaranteed to be compatible with each other.
+
+✅ **Encapsulate object creation logic** - Keep creation logic separate from usage, improving code organization and maintainability.
+
+### Problems It Solves
+
+❌ **Mixing incompatible styles** - Without Abstract Factory, you might accidentally create a Modern sofa with Victorian chairs, creating visual inconsistency.
+
+❌ **Tight coupling to concrete classes** - Client code directly instantiating concrete products makes it hard to swap implementations or add new variants.
+
+❌ **Scattered creation logic** - Product instantiation scattered throughout the codebase is difficult to maintain and extend.
+
+❌ **Violating Open/Closed Principle** - Adding new product families often requires modifying existing client code.
+
+### When to Use
+
+Consider implementing Abstract Factory when:
+
+- Your code needs to work with **multiple families of related products**
+- You want to **avoid dependencies on concrete product classes**
+- You need to **provide a library of products** that only reveals interfaces, not implementations
+- You want to **ensure product family consistency** (all products from the same variant are compatible)
+- You're building a system that should be **easily extended with new product families**
+- You have methods in a class that are becoming **a factory method god object** with too many creation responsibilities
+
+### Real-World Examples
+
+- **UI Frameworks:** Different themes (Light/Dark) with compatible buttons, checkboxes, windows
+- **Database Access:** Support multiple databases (SQL Server, PostgreSQL, MySQL) with compatible connection and query objects
+- **Document Viewers:** Support different document formats (PDF, Word, Excel) with compatible renderers and exporters
+- **Furniture Store Simulator:** Create furniture sets (chairs, sofas, tables) in different styles (Modern, Victorian, ArtDeco)
+
+### Key Components
+
+**1. Abstract Factory** (`IFurnitureFactory`)
+   - Declares methods to create abstract products
+   - Each method returns an abstract product type
+
+**2. Concrete Factories** (`ModernFurnitureFactory`, `VictorianFurnitureFactory`, `ArtDecoFurnitureFactory`)
+   - Implement methods to create specific product variants
+   - Each factory produces a complete family of compatible products
+
+**3. Abstract Products** (`IChair`, `ISofa`, `ICoffeeTable`)
+   - Declare interfaces for products in the family
+   - All variants must implement these interfaces
+
+**4. Concrete Products**
+   - Specific implementations of each product for each variant
+   - Ensure compatibility within their variant family
+
+**5. Client Code** (`FurnitureFactoryResolver`)
+   - Works only with abstract types
+   - Receives the factory and uses it to create products
+   - Doesn't depend on concrete product classes
+
+### Important Data to Consider
+
+| Aspect | Consideration |
+|--------|---------------|
+| **Complexity** | Introduces many new interfaces and classes; suitable for complex systems with multiple product families |
+| **Scalability** | Excellent for adding new variants; poor for adding new product types (requires interface changes) |
+| **Coupling** | Reduces coupling between client and concrete products |
+| **Testability** | Highly testable; easy to mock factories and products |
+| **Performance** | Negligible overhead; one extra layer of indirection |
+| **Learning Curve** | Moderate; requires understanding relationships between factories and products |
+| **When NOT to use** | Single product family, simple applications, static product catalog |
+
+### Pros and Cons
+
+**Advantages:**
+- ✅ Products from a factory are always compatible
+- ✅ Loose coupling between client and concrete product classes
+- ✅ Single Responsibility Principle - creation logic is centralized
+- ✅ Open/Closed Principle - new variants can be added without modifying client code
+- ✅ Reduces code duplication in client code
+
+**Disadvantages:**
+- ❌ Code complexity increases with many interfaces and classes
+- ❌ Adding new product types requires changing the abstract factory interface
+- ❌ May be overkill for simple systems with few product variants
+- ❌ Additional layers of abstraction can make code harder to follow for beginners
+
+### Pattern Relationships
+
+- **Compared to Factory Method:** Abstract Factory is more complex but handles families of objects; Factory Method is simpler for single object creation
+- **Combined with Builder:** Use when products are complex and require step-by-step construction
+- **Combined with Prototype:** Can use Prototype instead of factory methods for instantiation
+- **Alternative to Facade:** When you want to hide complex object creation from clients
+- **Works well with Bridge:** For handling abstract hierarchies and concrete implementations separately
+
+---
+
+## Project Status
+
+✅ Initial `ASP.NET Core Web API` project prepared  
+✅ **Abstract Factory pattern fully implemented** (furniture family by style)  
+✅ Scalable, extensible structure for adding new patterns  
+✅ Comprehensive routing and service resolution  
+
+---
+
+## Architecture
+
+```
+src/DesignPatterns.Api/
+├── Controllers/              # API endpoints for pattern demonstrations
+├── Application/              # Services that showcase each pattern
+├── Domain/                   # Core abstractions and product definitions
+│   └── AbstractFactory/
+│       └── Furniture/        # Product family for Abstract Factory
+├── Infrastructure/           # Concrete factories and implementations
+│   └── Factories/            # Factory implementations
+├── Extensions/               # Dependency injection setup
+└── Contracts/                # Request/Response models
+```
+
+### Current Structure
+
+```
+src/DesignPatterns.Api/
+├── Domain/AbstractFactory/
+│   └── Furniture/
+│       ├── IChair.cs
+│       ├── ISofa.cs
+│       ├── ICoffeeTable.cs
+│       ├── IFurnitureFactory.cs
+│       └── FurnitureSet.cs
+├── Infrastructure/Factories/
+│   ├── ModernFurnitureFactory.cs
+│   ├── VictorianFurnitureFactory.cs
+│   ├── ArtDecoFurnitureFactory.cs
+│   └── FurnitureFactoryResolver.cs
+└── Controllers/
+    └── PatternsController.cs
+```
+
+---
+
+## How to Run (Local)
+
+### Prerequisites
+- .NET 8.0 SDK or later
+- Windows/macOS/Linux with PowerShell or Bash
+
+### Build and Run
 
 ```bash
+# Restore dependencies
 dotnet restore
+
+# Build the solution
 dotnet build
+
+# Run the API
 dotnet run --project src/DesignPatterns.Api
 ```
 
-## Initial endpoints
+The API will be available at `http://localhost:5000` (or the port shown in console)
 
-- `GET /api/patterns/abstract-factory/styles`
-- `GET /api/patterns/abstract-factory/furniture-set?style=Modern`
+---
+
+## API Endpoints
+
+### Abstract Factory Pattern
+
+**Get available furniture styles:**
+```
+GET /api/patterns/abstract-factory/styles
+```
+
+**Get furniture set for a specific style:**
+```
+GET /api/patterns/abstract-factory/furniture-set?style=Modern
+```
+
+**Query Parameters:**
+- `style` (string): One of `Modern`, `Victorian`, `ArtDeco`
+
+**Example Response:**
+```json
+{
+  "style": "Modern",
+  "chair": {
+    "name": "Modern Chair",
+    "material": "Leather",
+    "legs": 4
+  },
+  "sofa": {
+    "name": "Modern Sofa",
+    "seats": 3
+  },
+  "coffeeTable": {
+    "name": "Modern Coffee Table",
+    "shape": "Rectangular"
+  }
+}
+```
+
+---
+
+## Future Implementation Plan
+
+### Next Patterns (Priority Order)
+
+1. **Factory Method** - Simplify Abstract Factory for single product creation
+2. **Builder** - Handle complex object construction step-by-step
+3. **Singleton** - Ensure single instances for shared resources
+4. **Decorator** - Add behavior to objects dynamically
+5. **Strategy** - Define interchangeable algorithms
+
+Each new pattern will:
+- Follow the same structured approach as Abstract Factory
+- Include comprehensive documentation
+- Provide practical API endpoints
+- Include conceptual and real-world examples
+- Not require changes to existing client code (evolutionary approach)
+
+---
+
+## Contributing
+
+When adding new patterns:
+
+1. Create domain abstractions in `Domain/[PatternName]/`
+2. Implement concrete classes in `Infrastructure/`
+3. Create service/application layer in `Application/`
+4. Add controller endpoints in `Controllers/`
+5. Update this README with pattern documentation
+6. Keep changes isolated - don't modify existing patterns
+
+---
+
+## License
+
+See [LICENSE](LICENSE) file for details.
+
+---
+
+## Resources
+
+- [Refactoring Guru - Design Patterns](https://refactoring.guru/design-patterns)
+- [Microsoft - Design Patterns](https://docs.microsoft.com/en-us/dotnet/architecture/modern-web-apps-azure/architectural-principles#design-patterns)
+- [Gang of Four - Design Patterns Book](https://en.wikipedia.org/wiki/Design_Patterns)
+
+---
+
+**Last Updated:** 2026  
+**Maintainer:** Design Patterns Lab Team
 
