@@ -10,7 +10,8 @@ A comprehensive exploration of Gang of Four design patterns implemented in .NET 
 
 1. **[Abstract Factory](#abstract-factory)** ✅ Implemented
    - Create families of related objects without specifying concrete classes
-2. **Factory Method** ⏳ Planned
+2. **[Factory Method](#factory-method)** ✅ Implemented
+   - Define an interface for creating objects, letting subclasses decide the type
 3. **Builder** ⏳ Planned
 4. **Prototype** ⏳ Planned
 5. **Singleton** ⏳ Planned
@@ -157,8 +158,10 @@ Consider implementing Abstract Factory when:
 
 ✅ Initial `ASP.NET Core Web API` project prepared  
 ✅ **Abstract Factory pattern fully implemented** (furniture family by style)  
+✅ **Factory Method pattern fully implemented** (logistics/transport system)  
 ✅ Scalable, extensible structure for adding new patterns  
 ✅ Comprehensive routing and service resolution  
+✅ Evolutionary architecture - new patterns don't break existing code  
 
 ---
 
@@ -169,10 +172,11 @@ src/DesignPatterns.Api/
 ├── Controllers/              # API endpoints for pattern demonstrations
 ├── Application/              # Services that showcase each pattern
 ├── Domain/                   # Core abstractions and product definitions
-│   └── AbstractFactory/
-│       └── Furniture/        # Product family for Abstract Factory
-├── Infrastructure/           # Concrete factories and implementations
-│   └── Factories/            # Factory implementations
+│   ├── AbstractFactory/      # Abstract Factory pattern
+│   └── FactoryMethod/        # Factory Method pattern
+├── Infrastructure/           # Concrete implementations and resolvers
+│   ├── Factories/            # Factory implementations (Abstract Factory)
+│   └── Creators/             # Creator implementations (Factory Method)
 ├── Extensions/               # Dependency injection setup
 └── Contracts/                # Request/Response models
 ```
@@ -181,18 +185,29 @@ src/DesignPatterns.Api/
 
 ```
 src/DesignPatterns.Api/
-├── Domain/AbstractFactory/
-│   └── Furniture/
-│       ├── IChair.cs
-│       ├── ISofa.cs
-│       ├── ICoffeeTable.cs
-│       ├── IFurnitureFactory.cs
-│       └── FurnitureSet.cs
-├── Infrastructure/Factories/
-│   ├── ModernFurnitureFactory.cs
-│   ├── VictorianFurnitureFactory.cs
-│   ├── ArtDecoFurnitureFactory.cs
-│   └── FurnitureFactoryResolver.cs
+├── Domain/
+│   ├── AbstractFactory/Furniture/
+│   │   ├── IChair.cs
+│   │   ├── ISofa.cs
+│   │   ├── ICoffeeTable.cs
+│   │   ├── IFurnitureFactory.cs
+│   │   └── FurnitureSet.cs
+│   └── FactoryMethod/
+│       ├── ITransport.cs
+│       ├── Logistics.cs (base creator class)
+│       ├── ConcreteTransports.cs (Truck, Ship, Airplane, Train)
+│       └── ConcreteLogistics.cs (RoadLogistics, SeaLogistics, AirLogistics, RailLogistics)
+├── Infrastructure/
+│   ├── Factories/
+│   │   ├── ModernFurnitureFactory.cs
+│   │   ├── VictorianFurnitureFactory.cs
+│   │   ├── ArtDecoFurnitureFactory.cs
+│   │   └── FurnitureFactoryResolver.cs
+│   └── Creators/
+│       └── ILogisticsResolver.cs (LogisticsResolver implementation)
+├── Application/
+│   ├── AbstractFactoryShowcaseService.cs
+│   └── FactoryMethodShowcaseService.cs
 └── Controllers/
     └── PatternsController.cs
 ```
@@ -259,20 +274,199 @@ GET /api/patterns/abstract-factory/furniture-set?style=Modern
 }
 ```
 
+### Factory Method Pattern
+
+**Get available transport types:**
+```
+GET /api/patterns/factory-method/transport-types
+```
+
+**Plan a delivery:**
+```
+GET /api/patterns/factory-method/plan-delivery?cargo=Electronics&destination=Berlin&transportType=Road
+```
+
+**Query Parameters:**
+- `cargo` (string): Description of the cargo to deliver
+- `destination` (string): Delivery destination
+- `transportType` (string): One of `Road`, `Sea`, `Air`, or `Rail`
+
+**Example Response:**
+```json
+{
+  "cargo": "Electronics",
+  "destination": "Berlin",
+  "transportType": "Road",
+  "result": "[RoadLogistics] Using Truck: Delivering 'Electronics' to Berlin by truck on highways. Road transport: ±5 days."
+}
+```
+
+**Compare delivery routes:**
+```
+GET /api/patterns/factory-method/compare-routes?cargo=Furniture&destination=Shanghai
+```
+
+**Query Parameters:**
+- `cargo` (string): Description of the cargo
+- `destination` (string): Delivery destination
+
+**Example Response:**
+```json
+{
+  "cargo": "Furniture",
+  "destination": "Shanghai",
+  "availableRoutes": [
+    "[RoadLogistics] Using Truck: Delivering 'Furniture' to Shanghai by truck on highways. Road transport: ±5 days.",
+    "[SeaLogistics] Using Ship: Delivering 'Furniture' to Shanghai by ship across the seas. Sea transport: ±30 days.",
+    "[AirLogistics] Using Airplane: Delivering 'Furniture' to Shanghai by airplane. Air transport: ±2 days (express).",
+    "[RailLogistics] Using Train: Delivering 'Furniture' to Shanghai by train on rails. Rail transport: ±10 days (bulk friendly)."
+  ]
+}
+```
+
+---
+
+## Factory Method
+
+### Overview
+
+**Type:** Creational Pattern  
+**Also Known As:** Virtual Constructor  
+**Difficulty Level:** ⭐⭐ (Beginner-Intermediate)
+
+### Definition
+
+Factory Method is a creational design pattern that provides an interface for creating objects in a superclass, while allowing subclasses to alter the type of objects that will be created.
+
+### What It Allows You to Do
+
+✅ **Decouple object creation from usage** - Client code doesn't know about concrete product classes; it works through abstract interfaces.
+
+✅ **Enable easy extension with new product types** - Add new creators without modifying existing client code.
+
+✅ **Centralize object creation logic** - All product instantiation happens in dedicated factory methods, making it easier to maintain.
+
+✅ **Support runtime product selection** - Choose which product to create at runtime based on configuration or conditions.
+
+✅ **Implement object pooling and reuse** - Factory methods can return cached or reused objects instead of always creating new ones.
+
+### Problems It Solves
+
+❌ **Tight coupling between client and product classes** - Direct instantiation scattered throughout code makes changes difficult.
+
+❌ **Difficulty adding new product types** - Conditional logic (switch/if-else) becomes scattered and hard to maintain.
+
+❌ **Violating Single Responsibility Principle** - Classes end up creating multiple types of objects alongside their main logic.
+
+❌ **Hard to test** - Direct object instantiation makes unit testing difficult without mocking frameworks.
+
+❌ **Framework/Library extensibility** - Libraries can't easily let users extend them with custom product types.
+
+### When to Use
+
+Consider implementing Factory Method when:
+
+- Your code needs to **work with objects whose types aren't known until runtime**
+- You want to **provide an extension point for users** of your library or framework
+- You need to **centralize object creation** to manage initialization complexity
+- You're **building a plugin system** or extensible architecture
+- You want to **implement object pooling** or lazy instantiation
+- You have **multiple related product types** that should be handled polymorphically
+
+### Real-World Examples
+
+- **UI Frameworks:** Creating buttons, dialogs, or controls for different OS platforms
+- **Logistics Systems:** Creating different transport types (truck, ship, airplane, train)
+- **Database Drivers:** Creating connections for different database engines (SQL Server, PostgreSQL, MySQL)
+- **Document Processing:** Creating renderers for different document formats (PDF, Word, Excel)
+- **Logging Frameworks:** Creating appropriate loggers based on configuration (file, console, cloud)
+- **Game Development:** Creating different enemy types based on game level or difficulty
+
+### Key Components
+
+**1. Creator (Abstract)** (`Logistics`)
+   - Declares the factory method
+   - Contains business logic that depends on products
+   - Works with products through abstract interface
+
+**2. Concrete Creators** (`RoadLogistics`, `SeaLogistics`, `AirLogistics`, `RailLogistics`)
+   - Override the factory method
+   - Each produces a specific product type
+   - Can add creator-specific logic
+
+**3. Product (Abstract)** (`ITransport`)
+   - Defines the interface all products must implement
+   - Ensures type safety and consistency
+
+**4. Concrete Products** (`Truck`, `Ship`, `Airplane`, `Train`)
+   - Implement the product interface
+   - Encapsulate their specific behavior
+
+**5. Resolver** (`LogisticsResolver`)
+   - Maps product types to creator implementations
+   - Encapsulates the selection logic
+
+### Important Data to Consider
+
+| Aspect | Consideration |
+|--------|---------------|
+| **Complexity** | Simpler than Abstract Factory; easier to implement and understand |
+| **Scalability** | Excellent for linear product variations; doesn't handle product families well |
+| **Coupling** | Reduces client-product coupling; minimal framework overhead |
+| **Testability** | Highly testable; easy to mock creators and products |
+| **Performance** | Negligible overhead; single layer of indirection |
+| **Learning Curve** | Low; most developers understand inheritance-based polymorphism |
+| **Best For** | Single product lines with multiple variants or implementations |
+
+### Pros and Cons
+
+**Advantages:**
+- ✅ Loose coupling between client and product classes
+- ✅ Single Responsibility Principle - creation logic in one place
+- ✅ Open/Closed Principle - new product types can be added easily
+- ✅ Simpler than Abstract Factory for handling single product types
+- ✅ Easier to implement object pooling and caching
+- ✅ Good for building extensible frameworks
+
+**Disadvantages:**
+- ❌ Code complexity increases with many creator subclasses
+- ❌ Each product type requires a new creator subclass
+- ❌ Not suitable for families of related products (use Abstract Factory instead)
+- ❌ Inheritance-based, so not as flexible as composition-based approaches
+
+### Pattern Relationships
+
+- **Compared to Abstract Factory:** Factory Method is simpler for single products; Abstract Factory handles product families
+- **Compared to Singleton:** Factory Method can work with Singleton to ensure only one instance exists
+- **With Template Method:** Factory Method is often a step in a Template Method algorithm
+- **With Strategy:** Similar structure but different intent - Strategy for behavior, Factory Method for object creation
+- **With Builder:** Combine when products are complex; use Builder for construction steps within factory
+
+### Comparison with Abstract Factory
+
+| Aspect | Factory Method | Abstract Factory |
+|--------|---|---|
+| **Products** | Single product line | Family of related products |
+| **Variants** | Multiple implementations | Multiple related implementations |
+| **Inheritance** | Based on inheritance | Based on composition |
+| **Complexity** | Simple | More complex |
+| **Use Case** | When you have one product type with multiple implementations | When you have families of related products |
+| **Example** | Transport types (truck, ship, airplane) | Furniture styles (Modern, Victorian, ArtDeco) |
+
 ---
 
 ## Future Implementation Plan
 
 ### Next Patterns (Priority Order)
 
-1. **Factory Method** - Simplify Abstract Factory for single product creation
-2. **Builder** - Handle complex object construction step-by-step
-3. **Singleton** - Ensure single instances for shared resources
-4. **Decorator** - Add behavior to objects dynamically
-5. **Strategy** - Define interchangeable algorithms
+1. **Builder** - Handle complex object construction step-by-step
+2. **Singleton** - Ensure single instances for shared resources
+3. **Decorator** - Add behavior to objects dynamically
+4. **Strategy** - Define interchangeable algorithms
+5. **Observer** - Implement event notification systems
 
 Each new pattern will:
-- Follow the same structured approach as Abstract Factory
+- Follow the same structured approach as Abstract Factory and Factory Method
 - Include comprehensive documentation
 - Provide practical API endpoints
 - Include conceptual and real-world examples
